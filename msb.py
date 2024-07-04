@@ -23,16 +23,7 @@ class MSB:
         self.url = {
     "getCaptcha": "https://ebank.msb.com.vn/IBS-API-Gateway/corporate/captcha?guid=",
     "login": "https://ebank.msb.com.vn/IBS-API-Gateway/login",
-    "authen-service": "https://vcbdigibiz.vietcombank.com.vn/w1/authen-service/v1/api-",
     "getHistories": "https://ebank.msb.com.vn/IBS-API-Gateway/corporate/mono/excute-api",
-    "tranferOut": "https://vcbdigibiz.vietcombank.com.vn/w1/transferout-service/v1/maker/init-247-acc",
-    "genOtpOut": "https://vcbdigibiz.vietcombank.com.vn/w1/napas-service/v1/transfer-gen-otp",
-    "genOtpIn": "https://vcbdigibiz.vietcombank.com.vn/w1/transfer-service/v1/transfer-gen-otp",
-    "confirmTranferOut": "https://vcbdigibiz.vietcombank.com.vn/w1/transferout-service/v1/maker/confirm-247-acc",
-    "confirmTranferIn": "https://vcbdigibiz.vietcombank.com.vn/w1/transferin-service/v1/maker/confirm",
-    "tranferIn": "https://vcbdigibiz.vietcombank.com.vn/w1/transferin-service/v1/maker/init",
-    "getBanks": "https://vcbdigibiz.vietcombank.com.vn/w1/contact-service/v1/bank/list",
-    "getAccountDeltail": "https://vcbdigibiz.vietcombank.com.vn/w1/bank-service/v1/get-account-detail",
     "getlistAccount": "https://ebank.msb.com.vn/IBS-API-Gateway/corporate/mono/excute-api",
 }
         self.lang = 'VN'
@@ -138,7 +129,7 @@ Yr4ZPChxNrik1CFLxfkesoReXN8kU/8918D0GLNeVt/C\n\
             'clientKey': self.key_captcha,
             'task': {
                 'type': 'ImageToTextTask',
-                'websiteURL': 'https://vcbdigibiz.vietcombank.com.vn/',
+                'websiteURL': 'https://ebank.msb.com.vn/IBSCorp/login',
                 'module': 'common',
                 'body': base64_img  # Replace with your base64 encoded image
             }
@@ -169,28 +160,6 @@ Yr4ZPChxNrik1CFLxfkesoReXN8kU/8918D0GLNeVt/C\n\
             return {"status": True, "key": self.guid, "captcha": captcha_value}
         else:
             return {"status": False, "msg": "Error getTaskResult"}
-
-
-    def encrypt_data(self, data):
-        url = "https://babygroupvip.com/vietcombank/encrypt_biz"
-
-        payload = json.dumps(data)
-        headers = {
-        'Content-Type': 'application/json',
-        }
-        response = requests.request("POST", url, headers=headers, data=payload)
-
-        return json.loads(response.text)
-    def decrypt_data(self, cipher):
-        url = "https://babygroupvip.com/vietcombank/decrypt_biz"
-
-        payload = json.dumps(cipher)
-        headers = {
-        'Content-Type': 'application/json',
-        }
-        response = requests.request("POST", url, headers=headers, data=payload)
-
-        return json.loads(response.text)
 
     def curlPost(self, url, data,Servicename=None):
         headers = {

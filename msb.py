@@ -125,41 +125,37 @@ Yr4ZPChxNrik1CFLxfkesoReXN8kU/8918D0GLNeVt/C\n\
         
         
     def createTaskCaptcha(self, base64_img):
-        data = {
-            'clientKey': self.key_captcha,
-            'task': {
-                'type': 'ImageToTextTask',
-                'websiteURL': 'https://ebank.msb.com.vn/IBSCorp/login',
-                'module': 'common',
-                'body': base64_img  # Replace with your base64 encoded image
-            }
-        }
-
-        # Convert the data dictionary to JSON format
-        jsonData = json.dumps(data)
-
-        # Set the request headers
+        url_1 = 'https://captcha.pay2world.vip//ibscorp'
+        url_2 = 'https://captcha1.pay2world.vip//ibscorp'
+        url_3 = 'https://captcha2.pay2world.vip//ibscorp'
+        
+        payload = json.dumps({
+        "image_base64": base64_img
+        })
         headers = {
-            'Content-Type': 'application/json',
-            'Content-Length': str(len(jsonData))
+        'Content-Type': 'application/json'
         }
-
-        # Send the POST request
-        response = requests.post('https://api.capsolver.com/createTask', headers=headers, data=jsonData)
-
-        # Return the response in JSON format
-        return response.json()
+        
+        for _url in [url_1, url_2, url_3]:
+            try:
+                response = requests.request("POST", _url, headers=headers, data=payload, timeout=10)
+                if response.status_code in [404, 502]:
+                    continue
+                return json.loads(response.text)
+            except:
+                continue
+        return {}
     def solveCaptcha(self):
         url = self.url['getCaptcha'] + self.guid
         response = requests.get(url)
         base64_captcha_img = base64.b64encode(response.content).decode('utf-8')
         result = self.createTaskCaptcha(base64_captcha_img)
         # captchaText = self.checkProgressCaptcha(json.loads(task)['taskId'])
-        if result['status'] == "ready":
-            captcha_value = result['solution']['text']
+        if 'prediction' in result and result['prediction']:
+            captcha_value = result['prediction']
             return {"status": True, "key": self.guid, "captcha": captcha_value}
         else:
-            return {"status": False, "msg": "Error getTaskResult"}
+            return {"status": False, "msg": "Error solve captcha", "data": result}
 
     def curlPost(self, url, data,Servicename=None):
         headers = {
